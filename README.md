@@ -1,6 +1,6 @@
 # project_30112023
 
-A new Flutter project.
+My App
 
 ## Getting Started
 
