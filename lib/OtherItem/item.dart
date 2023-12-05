@@ -20,3 +20,12 @@ void showSnackBar(BuildContext context, String message, Color colortext) {
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
+
+Widget BuildIconButton(Function onPressed, Icon icons) {
+  return IconButton(
+    onPressed: onPressed as void Function()? ?? () {},
+    icon: icons,
+    iconSize: 25,
+    color: Colors.black,
+  );
+}

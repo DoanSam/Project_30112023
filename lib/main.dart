@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_30112023/main_page.dart';
 import 'package:project_30112023/pages/Welcome/welcome_page.dart';
 
 void main() {
@@ -18,6 +19,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WelcomePage();
+    return MainPage();
   }
 }

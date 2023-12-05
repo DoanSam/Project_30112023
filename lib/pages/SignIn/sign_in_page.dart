@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:project_30112023/OtherItem/item.dart';
-import 'package:project_30112023/pages/home/home_page.dart';
+import 'package:project_30112023/main_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -15,6 +15,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
+
   Future<void> login() async {
     if (username.text.isEmpty || password.text.isEmpty) {
       showSnackBar(
@@ -37,12 +38,11 @@ class _SignInPageState extends State<SignInPage> {
 
       if (res.statusCode == 200) {
         var response = jsonDecode(res.body);
-
         if (response["success"] == true) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => HomePage(),
+              builder: (BuildContext context) => MainPage(),
             ),
           );
         } else {
@@ -54,10 +54,10 @@ class _SignInPageState extends State<SignInPage> {
           print("Login failed: ${response["message"]}");
         }
       } else {
-        print("HTTP error: ${res.statusCode}");
+        showSnackBar(context, '${res.statusCode}', Colors.red);
       }
     } catch (e) {
-      print('Error: $e');
+      showSnackBar(context, '$e', Colors.black);
     }
   }
 

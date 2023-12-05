@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter SnackBar Example'),
-      ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Hiển thị thông báo khi nút được nhấn
-          },
-          child: Text('Nhấn vào đây'),
-        ),
+        child: Text('Home Page'),
       ),
     );
   }
