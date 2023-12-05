@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:project_30112023/OtherItem/item.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -14,6 +17,11 @@ class _SignUpPageState extends State<SignUpPage> {
   bool male = false;
   bool female = false;
   bool other = false;
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
 
   String? SelectedAddress;
   List<String> addresslist = [
@@ -21,6 +29,20 @@ class _SignUpPageState extends State<SignUpPage> {
     'HCM',
     'Da Nang',
     'Lao Cai',
+    'Thanh Hoa',
+    'Nghe An',
+    'Hoa Binh',
+    'Hai Duong',
+    'Lai Chau',
+    'Cao Bang',
+    'Dien Bien',
+    'Yen Bai',
+    'Thai Nguyen',
+    'Hung Yen',
+    'Hue',
+    'Nha Trang',
+    'Ninh Binh',
+    'Binh Phuc',
   ];
   @override
   void initState() {
@@ -40,6 +62,50 @@ class _SignUpPageState extends State<SignUpPage> {
       setState(() {
         SelectedDate = picked;
       });
+    }
+  }
+
+  Future<void> insertRecord(
+      String sex, String? addressacc, DateTime age) async {
+    if (username.text.isEmpty ||
+        password.text.isEmpty ||
+        name.text.isEmpty ||
+        email.text.isEmpty ||
+        phone.text.isEmpty ||
+        !male ||
+        !female ||
+        !other) {
+      showSnackBar(
+        context,
+        'Vui lòng điền đầy đủ thông tin',
+        Colors.red,
+      );
+      return;
+    }
+    String uri = 'http://192.168.0.103/API_Project_30112023/insert.php';
+    var res = await http.post(
+      Uri.parse(uri),
+      body: {
+        'username': username.text,
+        'password': password.text,
+        'name': name.text,
+        'age': age.toIso8601String(),
+        'sex': sex,
+        'address': addressacc,
+        'mail': email.text,
+        'phone': phone.text,
+      },
+    ).timeout(Duration(seconds: 10));
+
+    if (res.statusCode == 200) {
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print('Insert Record Successfully');
+      } else {
+        print('Insert Record Error: ${response["message"]}');
+      }
+    } else {
+      print('HTTP error: ${res.statusCode}');
     }
   }
 
@@ -93,9 +159,10 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 30),
           TextField(
+            controller: username,
             decoration: InputDecoration(
               label: Text(
-                'Tài khoản/ Email',
+                'Tài khoản hoặc Email',
               ),
               icon: Icon(
                 Icons.person,
@@ -115,6 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
               print('clicked');
             },
             child: TextField(
+              controller: password,
               decoration: InputDecoration(
                 label: Text(
                   'Mật Khẩu',
@@ -139,6 +207,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 20),
           TextField(
+            controller: name,
             decoration: InputDecoration(
               label: Text(
                 'Họ và tên',
@@ -289,6 +358,7 @@ class _SignUpPageState extends State<SignUpPage> {
           _BuildAddress(),
           SizedBox(height: 20),
           TextField(
+            controller: email,
             decoration: InputDecoration(
               label: Text(
                 'Email',
@@ -307,6 +377,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 20),
           TextField(
+            controller: phone,
             decoration: InputDecoration(
               label: Text(
                 'Số điện thoại',
@@ -325,7 +396,17 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 40),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              String? sex;
+              if (male) {
+                sex = '0';
+              } else if (female) {
+                sex = '1';
+              } else {
+                sex = '2';
+              }
+              insertRecord(sex, SelectedAddress, SelectedDate);
+            },
             child: Text(
               'ĐĂNG KÝ',
               style: TextStyle(
@@ -451,7 +532,7 @@ class _SignUpPageState extends State<SignUpPage> {
         contentPadding: EdgeInsets.symmetric(horizontal: 20),
       ),
       dropdownColor: Colors.white,
-      style: TextStyle(),
+      style: TextStyle(color: Colors.black),
     );
   }
 }

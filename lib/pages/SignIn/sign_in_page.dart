@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:project_30112023/OtherItem/item.dart';
+import 'package:project_30112023/pages/home/home_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -9,6 +13,58 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  Future<void> login() async {
+    if (username.text.isEmpty || password.text.isEmpty) {
+      showSnackBar(
+        context,
+        'Vui lòng điền đầy đủ thông tin.',
+        Colors.black,
+      );
+      return;
+    }
+
+    String uri = 'http://192.168.0.103/API_Project_30112023/login.php';
+
+    try {
+      var res = await http.post(Uri.parse(uri), body: {
+        'username': username.text,
+        'password': password.text,
+      }).timeout(
+        Duration(seconds: 10),
+      );
+
+      if (res.statusCode == 200) {
+        var response = jsonDecode(res.body);
+
+        if (response["success"] == true) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => HomePage(),
+            ),
+          );
+        } else {
+          showSnackBar(
+            context,
+            'Sai tên người dùng hoặc mật khẩu.',
+            Colors.red,
+          );
+          print("Login failed: ${response["message"]}");
+        }
+      } else {
+        print("HTTP error: ${res.statusCode}");
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +118,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
           SizedBox(height: 30),
           TextField(
+            controller: username,
             decoration: InputDecoration(
               label: Text(
                 'Tài khoản/ Email',
@@ -84,6 +141,7 @@ class _SignInPageState extends State<SignInPage> {
               print('clicked');
             },
             child: TextField(
+              controller: password,
               decoration: InputDecoration(
                 label: Text(
                   'Mật Khẩu',
@@ -123,7 +181,9 @@ class _SignInPageState extends State<SignInPage> {
           ),
           SizedBox(height: 40),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              login();
+            },
             child: Text(
               'ĐĂNG NHẬP',
               style: TextStyle(
