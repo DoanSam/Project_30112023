@@ -286,7 +286,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ],
           ),
           SizedBox(height: 20),
-          _BuildCalendar(),
+          _BuildAddress(),
           SizedBox(height: 20),
           TextField(
             decoration: InputDecoration(
@@ -422,7 +422,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _BuildCalendar() {
+  Widget _BuildAddress() {
     return DropdownButtonFormField(
       value: SelectedAddress,
       onChanged: (value) {
@@ -450,6 +450,8 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 20),
       ),
+      dropdownColor: Colors.white,
+      style: TextStyle(),
     );
   }
 }
