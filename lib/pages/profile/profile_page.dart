@@ -128,17 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: 20),
           _BuildOders(),
           SizedBox(height: 20),
-          _BuildOders(),
-          SizedBox(height: 20),
-          _BuildOders(),
-          SizedBox(height: 20),
-          _BuildOders(),
-          SizedBox(height: 20),
-          _BuildOders(),
-          SizedBox(height: 20),
-          _BuildOders(),
-          SizedBox(height: 20),
-          _BuildOders(),
+          BuildBoxProducts('Bài đăng của bạn'),
         ],
       ),
     );
@@ -185,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
